@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" >
+<log4j:configuration>
+	<appender name="CONS" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n" />
+		</layout>
+	</appender>
+	<appender name="ROLLINGFILE" class="org.apache.log4j.RollingFileAppender">
+		<param name="maxFileSize" value="500KB" />
+		<param name="maxBackupIndex" value="5" />
+		<param name="File" value="c:/Jersey2Exam.log" />
+		<param name="threshold" value="debug" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{ABSOLUTE} %5p %t %c{1}:%L - %m%n" />
+		</layout>
+	</appender>
+	<appender name="DAILYROLLINGFILE" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="BufferedIO" value="true" />
+		<param name="BufferSize" value="8192" />
+		<param name="DatePattern" value="yyyy-MM-dd-HH-mm" />
+		<param name="File" value="${rootPath}/geoservicesrestusage.log" />
+		<param name="threshold" value="debug" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{ABSOLUTE} %5p %t %c{1}:%L - %m%n" />
+		</layout>
+	</appender>
+	<appender name="EMAIL" class="org.apache.log4j.net.SMTPAppender">
+		<param name="BufferSize" value="1024" />
+		<param name="SMTPHost" value="mail.toronto.ca" />
+		<param name="SMTPPort" value="25" />
+		<param name="From" value="xli@toronto.ca" />
+		<param name="To" value="xli@toronto.ca" />
+		<param name="Subject" value="GeoServices log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{ABSOLUTE} %5p %t %c{1}:%L - %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<!-- <param name="LevelMin" value="Error" /> -->
+			<param name="LevelMin" value="Info" />
+			<!-- <param name="LevelMin" value="Debug" /> -->
+			<param name="LevelMax" value="FATAL" />
+		</filter>
+	</appender>
+	<logger name="org.quartz" additivity="false">
+		<level value="ERROR" />
+	</logger>
+	<logger name="com.sun.jersey.api.container.filter.LoggingFilter">
+		<level value="all" />
+		<appender-ref ref="ROOT" />
+		<appender-ref ref="CONSOLE" />
+	</logger>
+	<logger name="gcc.service.rest.usage" additivity="false">
+		<!-- <level value="all" /> -->
+		<level value="INFO" />
+		<!-- <appender-ref ref="CONS" /> -->
+		<!-- <appender-ref ref="DAILYROLLINGFILE" /> -->
+		<appender-ref ref="EMAIL" />
+	</logger>
+	<root>
+		<level value="all" />
+		<appender-ref ref="CONS" />
+		<appender-ref ref="ROLLINGFILE" />
+		<!-- <appender-ref ref="EMAIL" /> -->
+	</root>
+</log4j:configuration>
